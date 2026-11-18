@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Карточка клиента{% endblock %}
+
+{% block content %}
+    <h1>Информация о клиенте</h1>
+    <p><strong>Фамилия:</strong> {{ recipient.last_name }}</p>
+    <p><strong>Имя:</strong> {{ recipient.first_name }}</p>
+    <p><strong>Email:</strong> {{ recipient.email }}</p>
+    <p><strong>Комментарий:</strong> {{ recipient.comment|default:"Нет комментария" }}</p>
+    
+    <a href="{% url 'recipients:update' recipient.pk %}">✏️ Редактировать</a> |
+    <a href="{% url 'recipients:delete' recipient.pk %}">❌ Удалить</a> |
+    <a href="{% url 'recipients:list' %}">⬅️ Назад к списку</a>
+{% endblock %}

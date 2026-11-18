@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Сервис управления рассылками{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">Сервис Рассылок</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{% url 'recipients:list' %}">Получатели</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="text-center text-muted py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2026 Сервис управления рассылками.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
