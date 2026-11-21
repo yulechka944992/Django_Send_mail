@@ -54,3 +54,23 @@ class Campaign(models.Model):
 
         if self.start_time and self.end_time and self.start_time >= self.end_time:
             raise ValidationError({'end_time': 'Дата окончания должна быть позже даты начала.'})
+
+
+class Attempt(models.Model):
+    STATUS_CHOICES = [
+        ('Успешно', 'Успешно'),
+        ('Не успешно', 'Не успешно'),
+    ]
+
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='logs', verbose_name="Рассылка")
+    recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE, verbose_name="Получатель")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, verbose_name="Статус")
+    error_message = models.TextField(blank=True, null=True, verbose_name="Текст ошибки")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата попытки")
+
+    class Meta:
+        verbose_name = "Попытка отправки"
+        verbose_name_plural = "Попытки отправки"
+
+    def __str__(self):
+        return f"{self.campaign.pk} -> {self.recipient.email} ({self.status})"
