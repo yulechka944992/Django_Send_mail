@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Сервис Рассылок{% endblock %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5">Панель управления</h1>
+            <p class="lead text-muted">Статистика вашего сервиса рассылок</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-primary h-100 shadow">
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <h5 class="card-title">Всего рассылок</h5>
+                    <h1 class="display-2 fw-bold">{{ total_campaigns }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-success h-100 shadow">
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <h5 class="card-title">Активные сейчас</h5>
+                    <h1 class="display-2 fw-bold">{{ active_campaigns_count }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-dark h-100 shadow">
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <h5 class="card-title">Уникальных получателей</h5>
+                    <h1 class="display-2 fw-bold">{{ total_recipients }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
