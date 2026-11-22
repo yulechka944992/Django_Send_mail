@@ -62,15 +62,15 @@ class Attempt(models.Model):
         ('Не успешно', 'Не успешно'),
     ]
 
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='logs', verbose_name="Рассылка")
+    mailing = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='attempts', verbose_name="Рассылка")
     recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE, verbose_name="Получатель")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, verbose_name="Статус")
-    error_message = models.TextField(blank=True, null=True, verbose_name="Текст ошибки")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата попытки")
+    attempt_time = models.DateTimeField(auto_now_add=True, verbose_name="Дата и время попытки")
+    server_response = models.TextField(blank=True, null=True, verbose_name="Ответ почтового сервера")
 
     class Meta:
         verbose_name = "Попытка отправки"
         verbose_name_plural = "Попытки отправки"
 
     def __str__(self):
-        return f"{self.campaign.pk} -> {self.recipient.email} ({self.status})"
+        return f"{self.mailing.pk} -> {self.recipient.email} ({self.status})"
