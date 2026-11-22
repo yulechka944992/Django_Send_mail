@@ -14,4 +14,5 @@ urlpatterns = [
     path('campaigns/<int:pk>/', views.CampaignDetailView.as_view(), name='campaign_detail'),
     path('campaigns/<int:pk>/update/', views.CampaignUpdateView.as_view(), name='campaign_update'),
     path('campaigns/<int:pk>/delete/', views.CampaignDeleteView.as_view(), name='campaign_delete'),
+    path('campaigns/<int:pk>/send/', views.start_campaign, name='campaign_send'),
 ]
