@@ -21,7 +21,7 @@ class Campaign(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name="Сообщение")
     recipients = models.ManyToManyField(Recipient, verbose_name="Получатели")
 
-    status = models.CharField(max_length=20, blank=True, null=True, verbose_name="Статус")
+    status = models.CharField(max_length=20, default='Создана', blank=True, verbose_name="Статус")
 
     class Meta:
         verbose_name = "Рассылка"
@@ -32,18 +32,25 @@ class Campaign(models.Model):
 
     def update_status(self):
         now = timezone.now()
-        new_status = ''
-
-        if now < self.end_time:
-            new_status = 'Создана'
+        if now < self.start_time:
+            self.status = 'Создана'
         elif self.start_time <= now <= self.end_time:
-            new_status = 'Запущена'
+            self.status = 'Запущена'
         else:
-            new_status = 'Завершена'
+            self.status = 'Завершена'
+        self.save()
 
-        if self.status != new_status:
-            self.status = new_status
-            self.save()
+    def save(self, *args, **kwargs):
+        """Автоматически ставит правильный статус при создании/редактировании"""
+        if not self.status:
+            now = timezone.now()
+            if now < self.start_time:
+                self.status = 'Создана'
+            elif self.start_time <= now <= self.end_time:
+                self.status = 'Запущена'
+            else:
+                self.status = 'Завершена'
+        super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
