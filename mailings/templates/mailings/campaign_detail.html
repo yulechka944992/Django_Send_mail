@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Рассылка #{{ campaign.pk }}{% endblock %}
+
+{% block content %}
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0">Рассылка #{{ campaign.pk }}</h2>
+            <span class="badge {% if campaign.status == 'Запущена' %}bg-success{% elif campaign.status == 'Создана' %}bg-secondary{% else %}bg-danger{% endif %} fs-6">
+                {{ campaign.status }}
+            </span>
+        </div>
+        <div class="card-body">
+            <p><strong>Сообщение:</strong> {{ campaign.message.subject }}</p>
+            <p><strong>Начало:</strong> {{ campaign.start_time|date:"d.m.Y H:i" }}</p>
+            <p><strong>Окончание:</strong> {{ campaign.end_time|date:"d.m.Y H:i" }}</p>
+            
+            <hr>
+            <p><strong>Получатели ({{ campaign.recipients.count }}):</strong></p>
+            <ul class="list-group mb-3">
+                {% for recipient in campaign.recipients.all %}
+                    <li class="list-group-item">{{ recipient.last_name }} {{ recipient.first_name }} ({{ recipient.email }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">Получатели не выбраны.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="card-footer bg-white d-flex justify-content-between">
+            <a href="{% url 'mailings:campaign_list' %}" class="btn btn-secondary">⬅️ Назад к списку</a>
+            <div>
+                <a href="{% url 'mailings:campaign_send' campaign.pk %}" class="btn btn-success me-2" onclick="return confirm('Вы уверены, что хотите запустить рассылку прямо сейчас?');">
+                    🚀 Запустить рассылку
+                </a>
+                <a href="{% url 'mailings:campaign_update' campaign.pk %}" class="btn btn-outline-secondary">✏️ Редактировать</a>
+                <a href="{% url 'mailings:campaign_delete' campaign.pk %}" class="btn btn-outline-danger">❌ Удалить</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

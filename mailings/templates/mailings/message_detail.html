@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ message.subject }}{% endblock %}
+
+{% block content %}
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <h2 class="h4 mb-0">Тема: {{ message.subject }}</h2>
+        </div>
+        <div class="card-body">
+            <p class="card-text" style="white-space: pre-wrap;">{{ message.body }}</p>
+        </div>
+        <div class="card-footer bg-white d-flex justify-content-between">
+            <a href="{% url 'mailings:message_list' %}" class="btn btn-secondary">⬅️ Назад к списку</a>
+            <div>
+                <a href="{% url 'mailings:message_update' message.pk %}" class="btn btn-outline-secondary">✏️ Редактировать</a>
+                <a href="{% url 'mailings:message_delete' message.pk %}" class="btn btn-outline-danger">❌ Удалить</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
