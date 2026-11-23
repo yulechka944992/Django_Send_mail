@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mailings',
     'recipients',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,7 @@ MAILERS = {
 DEFAULT_FROM_EMAIL = 'noreply@mail-service.ru'
 
 DEFAULT_CHARSET = 'utf-8'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'accounts:login'
