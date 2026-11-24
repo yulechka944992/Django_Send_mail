@@ -26,6 +26,7 @@ urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
     path('recipients/', include('recipients.urls')),
     path('mailings/', include('mailings.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:
