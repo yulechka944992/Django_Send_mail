@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Статистика отправок</h1>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-info shadow h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Всего попыток</h5>
+                    <h1 class="display-3 fw-bold">{{ total_attempts }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-success shadow h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Успешно</h5>
+                    <h1 class="display-3 fw-bold">{{ success_attempts }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-danger shadow h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">С ошибкой</h5>
+                    <h1 class="display-3 fw-bold">{{ failed_attempts }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'mailings:campaign_list' %}" class="btn btn-secondary">⬅️ Назад к рассылкам</a>
+    </div>
+{% endblock %}

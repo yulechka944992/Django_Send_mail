@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from django.utils import timezone
 
 from django.shortcuts import get_object_or_404, redirect
@@ -7,7 +9,7 @@ from django.contrib import messages
 
 from recipients.models import Recipient
 from .forms import CampaignForm
-from .models import Message, Campaign
+from .models import Message, Campaign, Attempt
 from .services import send_campaign
 
 
@@ -39,13 +41,13 @@ class MessageDeleteView(DeleteView):
     success_url = reverse_lazy('mailings:message_list')
 
 
-class CampaignListView(ListView):
+class CampaignListView(LoginRequiredMixin, ListView):
     model = Campaign
     template_name = 'mailings/campaign_list.html'
     context_object_name = 'campaigns'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Campaign.objects.filter(owner=self.request.user)
         for campaign in queryset:
             campaign.update_status()
         return queryset
@@ -55,6 +57,10 @@ class CampaignCreateView(CreateView):
     form_class = CampaignForm
     template_name = 'mailings/campaign_form.html'
     success_url = reverse_lazy('mailings:campaign_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 class CampaignDetailView(DetailView):
     model = Campaign
@@ -111,3 +117,23 @@ class HomePageView(TemplateView):
 
         return context
 
+
+class StatisticsView(LoginRequiredMixin, TemplateView):
+    template_name = 'mailings/statistics.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_attempts = Attempt.objects.filter(mailing__owner=self.request.user)
+
+        stats = user_attempts.aggregate(
+            total=Count('id'),
+            success=Count('id', filter=Q(status='Успешно')),
+            failed=Count('id', filter=Q(status='Не успешно'))
+        )
+
+        context['total_attempts'] = stats['total'] or 0
+        context['success_attempts'] = stats['success'] or 0
+        context['failed_attempts'] = stats['failed'] or 0
+
+        return context

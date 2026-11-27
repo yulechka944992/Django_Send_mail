@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+
+from django.conf import settings
 from recipients.models import Recipient
 
 class Message(models.Model):
@@ -22,6 +24,14 @@ class Campaign(models.Model):
     recipients = models.ManyToManyField(Recipient, verbose_name="Получатели")
 
     status = models.CharField(max_length=20, default='Создана', blank=True, verbose_name="Статус")
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Владелец",
+        null=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = "Рассылка"
